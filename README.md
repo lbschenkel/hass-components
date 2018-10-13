@@ -6,10 +6,9 @@ A number of custom components I have developed for Home Assistant.
 
 Reads the balance of a Jojo card from Skånetrafiken website.
 
-### Component:
-`sensor/skanetrafiken_jojo.py`
+**Component:** `sensor/skanetrafiken_jojo.py`
 
-### Usage:
+**Usage:**
 ```
 sensor:
   - platform: skanetrafiken_jojo
