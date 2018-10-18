@@ -61,15 +61,18 @@ class JojoSensor(Entity):
             soup_config={'features': 'html5lib'},
             raise_on_404=True,
         )
-        browser.open("https://www.skanetrafiken.se/e-tjanster/se-saldo-och-ladda-kort1/")
-        browser.select_form('form#view-balance-and-charge-card-directly-form')
-        browser['request.CardNumber'] = self._card_number
-        browser['request.Cvc'] = self._card_cvc
-        browser.submit_selected()
-        balance = browser.get_current_page().select(".balance")
-        if balance:
-            balance = balance[0].string
-            balance = balance.strip().split(' ')[0].replace(',', '.')
-            self._state = balance
-        else:
-            self._state = STATE_UNKNOWN
+        try:
+            browser.open("https://www.skanetrafiken.se/e-tjanster/se-saldo-och-ladda-kort1/")
+            browser.select_form('form#view-balance-and-charge-card-directly-form')
+            browser['request.CardNumber'] = self._card_number
+            browser['request.Cvc'] = self._card_cvc
+            browser.submit_selected()
+            balance = browser.get_current_page().select(".balance")
+            if balance:
+                balance = balance[0].string
+                balance = balance.strip().split(' ')[0].replace(',', '.')
+                self._state = balance
+            else:
+                self._state = STATE_UNKNOWN
+        finally:
+            browser.close()
