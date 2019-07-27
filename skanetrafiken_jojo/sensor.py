@@ -9,8 +9,6 @@ from homeassistant.components.sensor import PLATFORM_SCHEMA
 from homeassistant.const import (CONF_NAME, CONF_SCAN_INTERVAL, STATE_UNKNOWN)
 from homeassistant.helpers.entity import Entity
 
-REQUIREMENTS = ['MechanicalSoup==0.11.0', 'html5lib==1.0.1']
-
 _LOGGER = logging.getLogger(__name__)
 
 CONF_CARD_NUMBER = 'card_number'
@@ -30,8 +28,8 @@ def setup_platform(_hass, config, add_entities, _discovery_info=None):
     name = config.get(CONF_NAME)
     card_number = config.get(CONF_CARD_NUMBER)
     card_cvc = config.get(CONF_CARD_CVC)
-
     add_entities([JojoSensor(name, card_number, card_cvc)], True)
+    return True
 
 
 class JojoSensor(Entity):
@@ -62,6 +60,7 @@ class JojoSensor(Entity):
             raise_on_404=True,
         )
         try:
+            _LOGGER.info("Updating Jojo balance for card %s", self._card_number)
             browser.open("https://www.skanetrafiken.se/e-tjanster/se-saldo-och-ladda-kort1/")
             browser.select_form('form#view-balance-and-charge-card-directly-form')
             browser['request.CardNumber'] = self._card_number

@@ -1,0 +1,1 @@
+"""Skånetrafiken's Jojo card balance sensor"""
